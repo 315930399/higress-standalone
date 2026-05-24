@@ -203,8 +203,8 @@ services:
     depends_on:
       pilot:
         condition: service_healthy
-      # plugin-server:
-      #   condition: service_healthy
+      plugin-server:
+        condition: service_healthy
     networks:
       higress-net:
         aliases:
@@ -235,27 +235,27 @@ services:
       - ./volumes/gateway/proxy:/etc/istio/proxy:rw
       - ./volumes/gateway/plugins:/plugins:ro
 
-  # plugin-server:
-  #   hostname: higress-plugin-server
-  #   image: higress-registry.cn-hangzhou.cr.aliyuncs.com/higress/plugin-server:${HIGRESS_PLUGIN_SERVER_TAG}
-  #   profiles: [ "plugin-server" ]
-  #   # depends_on:
-  #   #   prepare:
-  #   #     condition: service_completed_successfully
-  #   networks:
-  #     higress-net:
-  #       aliases:
-  #         - plugin-server.svc
-  #   restart: always
-  #   healthcheck:
-  #     test: [ "CMD-SHELL", "curl -sf http://127.0.0.1:8080/ || exit 1" ]
-  #     interval: 1s
-  #     timeout: 3s
-  #     retries: 60
+  plugin-server:
+    hostname: higress-plugin-server
+    image: higress-registry.cn-hangzhou.cr.aliyuncs.com/higress/plugin-server:${HIGRESS_PLUGIN_SERVER_TAG}
+    profiles: [ "plugin-server" ]
+    depends_on:
+      prepare:
+        condition: service_completed_successfully
+    networks:
+      higress-net:
+        aliases:
+          - plugin-server.svc
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sf http://127.0.0.1:8080/ || exit 1" ]
+      interval: 1s
+      timeout: 3s
+      retries: 60
 
   console:
     hostname: higress-console
-    image: higress-registry.cn-hangzhou.cr.aliyuncs.com/higress/console:${HIGRESS_CONSOLE_TAG}
+    image: higress-console:0.0.1
     env_file:
       - ./env/console.env
     environment:
