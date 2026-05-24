@@ -233,7 +233,6 @@ services:
       - ./volumes/gateway/log:/var/log/proxy:rw
       - ./volumes/gateway/secrets:/var/run/secrets:rw
       - ./volumes/gateway/proxy:/etc/istio/proxy:rw
-      - ./volumes/gateway/plugins:/plugins:ro
 
   plugin-server:
     hostname: higress-plugin-server
